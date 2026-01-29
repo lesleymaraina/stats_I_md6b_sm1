@@ -1,0 +1,199 @@
+---
+title: "Generalized Linear Models: Primer for Code Implementation"
+author: "<br><br><span style='font-size:25px;'><strong>Lesley Chapman Hannah, Ph.D., M.S.</strong></span><br>College of Graduate Studies<br>Northeast Ohio Medical University"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: true
+    #incremental: true
+    code-fold: false
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: true
+---
+
+## Regression Review
+
+- regression integrates sampling, estimation, and hypothesis testing  
+- outcomes arise from an underlying probability distribution  
+- regression models are defined by a conditional distribution: `likelihood`  
+- inference, prediction, and model comparison stem from the likelihood  
+
+## Generalized linear models
+
+Generalized linear models (GLM): class of regression models defined by the common mathematical structure that links regression models and includes:
+
+- linear predictor of the form $Xβ$
+- probability distribution for the outcome
+- a rule that links the mean of that distribution to the linear predictor
+
+
+## Generalized Linear Models in Biomedicine
+
+Biomedical research outcomes exhibit:
+
+- binary structure (response / non-response)  
+- discrete counts (events, mutations)  
+- skewed or bounded measurements  
+
+
+## Definitive Definition: Generalized Linear Model
+<div style="font-size:0.7em">
+**generalized linear model (GLM)** is a regression model defined by three components:
+
+GLMs share the following:
+
+- linear predictor  
+- probability model for the outcome  
+- likelihood-based estimation and inference 
+
+
+
+
+
+</div>
+
+## Definitive Definition: Generalized Linear Model
+<div style="font-size:0.6em">
+
+1. linear predictor that combines covariates
+$$
+\eta = X\beta
+$$
+
+2. outcome distribution from the exponential family
+
+$$
+Y \mid X \sim Disrtibution
+$$
+
+
+$$
+Y \mid X \sim f(y \mid \theta)
+$$
+
+3. link function that connects the expected outcome to the linear predictor
+$$
+g\left(\mathbb{E}[Y \mid X]\right) = \eta
+$$
+
+
+
+</div>
+
+## Members of the GLM family
+<div style="font-size:0.6em">
+- most regression models fit within the GLM framework
+- each specific model is distinguished by the choice of outcome distribution and link function 
+
+`Linear regression`: Gaussian member of the GLM family
+
+  - continuous outcomes such as gene expression or lab values
+
+`Logistic regression`: Bernoulli member of the GLM family
+
+  - binary outcomes such as disease status or treatment response
+
+</div>
+
+
+## Members of the GLM family
+<div style="font-size:0.6em">
+
+`Poisson regression`: count-data member of the GLM family
+
+  - count outcomes such as admissions or mutation counts
+
+`Negative binomial regression`: dispersion-adjusted count member of the GLM family
+
+  - count data when the observed variability in counts is larger than what a Poisson model can explain [i.e.: number of mutations in a tumor]
+  
+**Note:**
+`Cox regression`: not a member of the GLM familty because it uses a partial likelihood
+- following lectures will still cover practical implementation of Cox regression
+
+</div>
+
+## Linear Regression as a Special Case of a GLM
+<div style="font-size:0.7em">
+for linear regression:
+
+- outcome distribution
+$$
+Y \mid X \sim N(X\beta, \sigma^2)
+$$
+
+- link function (identity)
+- part of the model that determines how the mean of the outcome distribution relates to the linear predictor
+$$
+\mathbb{E}[Y \mid X] = X\beta
+$$
+</div>
+
+## Logistic Regression as a GLM
+<div style="font-size:0.7em">
+- outcome distribution
+  - binary outcome [0 or 1]
+  - parameter [p]: probability of an event given the predictors
+$$
+Y \mid X \sim \text{Bernoulli}(p)
+$$
+
+- link function (logit)
+  - logit maps probability of an outcome being 0 or 1 to a set of predictors
+
+$$
+\log\left(\frac{p}{1-p}\right) = X\beta
+$$
+</div>
+
+## Count Models as GLMs
+<div style="font-size:0.7em">
+
+**Poisson regression**
+
+- outcome distribution
+  - describes the expected number of events for a patient or sample with given characteristics
+  - coefficients describe how predictors change the expected number of events
+- link function
+  - log of the expected count
+  - allows effects to be interpreted as proportional changes
+$$
+Y \mid X \sim \text{Poisson}(\lambda), \quad \log(\lambda) = X\beta
+$$
+
+
+</div>
+
+
+## Count Models as GLMs
+<div style="font-size:0.6em">
+
+**Negative binomial regression**
+
+- outcome distribution
+  - describes count or the expected number of events and allows for increased variation in count [i.e.: immune cell counts across patients]
+  
+- link function
+  - log of the expected count
+  - link allows for greater biological variability across individuals or samples
+  
+$$
+Y \mid X \sim \text{NB}(\mu, \theta), \quad \log(\mu) = X\beta
+$$
+
+</div>
+
+
+## GLM Summary
+
+generalized linear models are a class of models that:
+
+- unifies most regression models across outcome types  
+- preserves likelihood-based inference  
+- connects model choice directly to biological measurement processes  
+
+**Next lectures**: implementation of these models in practice in applied biomedical settings
